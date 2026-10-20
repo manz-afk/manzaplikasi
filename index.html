@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gudang Aplikasi</title>
+
+<style>
+/* ==========================================================
+   1. WARNA
+   ========================================================== */
+:root {
+  --bg: #0c061c;
+  --card: rgba(22, 10, 48, .72);
+  --card-hi: rgba(52, 24, 104, .75);
+  --line: #6b3fd1;
+  --text: #f4eeff;
+  --muted: #b6a3de;
+  --accent: #b983ff;
+  --cyan: #7df9ff;
+}
+
+/* ==========================================================
+   2. DASAR & LATAR BELAKANG
+   (gambar latar: file bg.jpg, satu folder dengan index.html)
+   ========================================================== */
+* { box-sizing: border-box; margin: 0; }
+
+html { background: var(--bg); }
+
+body {
+  position: relative;
+  min-height: 100vh;
+  color: var(--text);
+  font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* gambar latar + lapisan gelap */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    linear-gradient(180deg, rgba(12, 6, 28, .35), rgba(12, 6, 28, .82)),
+    url("bg.jpg") center top / cover no-repeat,
+    var(--bg);
+}
+
+/* garis kecepatan ala manga */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .14;
+  background: repeating-conic-gradient(from 0deg at 50% 38%, #fff 0 .4deg, transparent .4deg 6deg);
+  -webkit-mask: radial-gradient(circle at 50% 38%, transparent 18%, #000 75%);
+          mask: radial-gradient(circle at 50% 38%, transparent 18%, #000 75%);
+}
+
+button, input { font: inherit; color: inherit; }
+
+:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+
+/* ==========================================================
+   3. HEADER
+   ========================================================== */
+header {
+  padding: 22px 16px;
+  border-bottom: 3px solid var(--accent);
+  background: linear-gradient(100deg, rgba(12, 6, 28, .92) 55%, rgba(59, 26, 122, .55));
+  box-shadow: 0 4px 24px rgba(185, 131, 255, .35);
+}
+
+h1 {
+  font-size: 26px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: .01em;
+  text-shadow: 2px 2px 0 var(--line), 0 0 18px rgba(185, 131, 255, .8);
+}
+
+h1 small {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 600;
+  font-style: normal;
+  letter-spacing: .04em;
+  color: var(--cyan);
+  text-shadow: none;
+}
+
+/* ==========================================================
+   4. KONTEN UTAMA
+   ========================================================== */
+main {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 16px 16px 96px; /* ruang bawah untuk bar tab di HP */
+}
+
+.tools { margin-bottom: 14px; }
+
+.tools input {
+  width: 100%;
+  padding: 11px 14px;
+  background: rgba(12, 6, 28, .78);
+  border: 2px solid var(--line);
+  border-radius: 4px;
+  backdrop-filter: blur(4px);
+}
+
+.tools input:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 12px rgba(125, 249, 255, .4);
+  outline: 0;
+}
+
+.note {
+  margin-bottom: 12px;
+  padding: 6px 10px;
+  font-size: 13px;
+  color: var(--cyan);
+  background: rgba(12, 6, 28, .7);
+  border-left: 4px solid var(--cyan);
+}
+
+/* ==========================================================
+   5. KARTU APLIKASI
+   ========================================================== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.app {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  background: var(--card);
+  backdrop-filter: blur(7px);
+  border: 1px solid var(--line);
+  border-left: 5px solid var(--accent);
+  border-radius: 3px 16px 3px 16px;
+  box-shadow: 0 0 18px rgba(124, 58, 237, .35), inset 0 0 30px rgba(185, 131, 255, .06);
+}
+
+/* titik halftone di pojok kanan atas */
+.app::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 46px;
+  height: 46px;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(185, 131, 255, .35) 1.2px, transparent 1.6px) 0 0 / 7px 7px;
+  -webkit-mask: linear-gradient(225deg, #000, transparent 70%);
+          mask: linear-gradient(225deg, #000, transparent 70%);
+}
+
+.top { display: flex; align-items: center; gap: 12px; }
+
+.ico {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  overflow: hidden;
+  font-size: 24px;
+  font-weight: 900;
+  font-style: italic;
+  color: #fff;
+  background: linear-gradient(135deg, #7c3aed, #2a0f5e);
+  border: 2px solid var(--accent);
+  border-radius: 50% 12px 50% 12px;
+  box-shadow: 0 0 10px rgba(185, 131, 255, .6);
+}
+
+.ico img { width: 100%; height: 100%; object-fit: cover; }
+
+.name { font-size: 16px; font-weight: 800; text-shadow: 0 0 10px rgba(185, 131, 255, .5); }
+.meta { font-size: 12.5px; color: var(--muted); }
+.desc { flex: 1; font-size: 14px; color: #e3d8fb; overflow-wrap: anywhere; }
+
+.empty {
+  grid-column: 1 / -1;
+  padding: 48px 12px;
+  text-align: center;
+  color: var(--muted);
+  background: var(--card);
+  backdrop-filter: blur(6px);
+  border: 2px dashed var(--line);
+  border-radius: 4px 18px 4px 18px;
+}
+
+/* ==========================================================
+   6. TOMBOL
+   ========================================================== */
+.btn {
+  display: inline-block;
+  padding: 10px 18px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--card-hi), rgba(28, 12, 60, .9));
+  border: 0;
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+  transition: filter .15s, transform .15s;
+}
+
+.btn:hover { filter: brightness(1.35) drop-shadow(0 0 6px var(--accent)); transform: translateY(-1px); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.btn.pri {
+  color: #fff;
+  background: linear-gradient(135deg, #c79bff, #7c3aed);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .5);
+}
+
+.btn.sm { padding: 7px 14px; font-size: 13px; }
+
+/* ==========================================================
+   7. TAB KATEGORI
+   HP: bar tetap di bawah layar | Komputer: tab gaya browser di atas
+   ========================================================== */
+.tabs {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 8;
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 10px 10px calc(10px + env(safe-area-inset-bottom, 0px));
+  background: linear-gradient(0deg, rgba(12, 6, 28, .97) 60%, rgba(12, 6, 28, .8));
+  border-top: 3px solid var(--accent);
+  box-shadow: 0 -4px 24px rgba(185, 131, 255, .35);
+  backdrop-filter: blur(8px);
+  scrollbar-width: none;
+}
+
+.tabs::-webkit-scrollbar { display: none; }
+.tabs::before, .tabs::after { content: ""; margin: auto; } /* membuat tab rata tengah, tetap bisa digeser */
+
+.tab {
+  flex: none;
+  padding: 9px 20px;
+  font-weight: 800;
+  font-style: italic;
+  color: var(--muted);
+  cursor: pointer;
+  background: rgba(18, 8, 40, .82);
+  border: 0;
+  clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
+  backdrop-filter: blur(4px);
+  transition: filter .15s;
+}
+
+.tab b {
+  margin-left: 4px;
+  padding: 1px 6px;
+  font-size: 11px;
+  font-style: normal;
+  background: rgba(185, 131, 255, .25);
+  border-radius: 9px;
+}
+
+.tab:hover { filter: brightness(1.4); }
+
+.tab.on {
+  color: #fff;
+  background: linear-gradient(135deg, #c79bff, #7c3aed);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .5);
+}
+
+.tab.on b { background: rgba(0, 0, 0, .3); }
+
+/* ==========================================================
+   8. MODE KOMPUTER (layar lebar)
+   ========================================================== */
+@media (min-width: 768px) {
+  main { display: flex; flex-direction: column; padding-bottom: 32px; }
+
+  .tabs {
+    order: -1;
+    position: static;
+    overflow: visible;
+    gap: 4px;
+    padding: 0;
+    margin-bottom: 16px;
+    background: none;
+    border-top: 0;
+    border-bottom: 3px solid var(--accent);
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+
+  .tabs::before, .tabs::after { display: none; }
+
+  .tab {
+    padding: 11px 26px;
+    font-size: 14px;
+    font-style: normal;
+    clip-path: none;
+    border: 1px solid var(--line);
+    border-bottom: 0;
+    border-radius: 10px 10px 0 0;
+  }
+
+  .tab:hover { filter: brightness(1.3); transform: translateY(-2px); }
+  .tab.on { border-color: var(--accent); box-shadow: 0 -4px 16px rgba(185, 131, 255, .5); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn, .tab { transition: none; }
+}
+</style>
+
+</head>
+
+<body>
+
+<header>
+  <h1>Gudang Aplikasi<small>アプリ保管庫 &middot; unduh aplikasi dari server sendiri</small></h1>
+</header>
+
+<main>
+  <div class="tools">
+    <input id="q" type="search" placeholder="Cari aplikasi" aria-label="Cari aplikasi">
+  </div>
+
+  <div class="tabs" id="tabs" role="tablist" aria-label="Kategori aplikasi"></div>
+
+  <p class="note" id="demoNote" hidden>Mode demo: server belum terhubung, yang tampil hanya data contoh.</p>
+
+  <div class="grid" id="grid"></div>
+</main>
+
+<script>
+/* ==========================================================
+   PENGATURAN
+   ========================================================== */
+// Kosongkan kalau HTML ini disajikan dari server yang sama (disarankan, tanpa API publik).
+// Kalau memakai domain terpisah, isi misalnya: "https://domainmu.com"
+const API_BASE = "";
+
+const REFRESH_MS = 30000;                                  // cek aplikasi baru dari bot
+const CATEGORIES = ["Aplikasi", "Game", "Tools", "Lainnya"];
+const TABS = [["all", "Semua"], ...CATEGORIES.map(c => [c, c])];
+
+// Data contoh, hanya tampil kalau server belum terhubung
+const DEMO = [
+  { id: "d1", name: "Contoh Aplikasi", version: "1.0.0", category: "Aplikasi", size: 5242880,
+    desc: "Ini data contoh. Aplikasi asli muncul otomatis setelah server terhubung." },
+  { id: "d2", name: "Contoh Game", version: "2.1.0", category: "Game", size: 31457280,
+    desc: "Aplikasi ditambahkan lewat bot, lalu langsung tampil di sini." },
+  { id: "d3", name: "Contoh Tools", version: "0.9.5", category: "Tools", size: 1048576,
+    desc: "Hanya aplikasi berstatus publik yang bisa dilihat pengunjung." }
+];
+
+/* ==========================================================
+   STATE & FUNGSI BANTU
+   ========================================================== */
+const $ = selector => document.querySelector(selector);
+
+let apps = [];
+let demo = false;
+let activeTab = "all";
+
+const escapeHTML = value => String(value ?? "").replace(/[&<>"']/g, ch => (
+  { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[ch]
+));
+
+const categoryOf = app => app.category || "Aplikasi";
+
+const fileUrl = path => {
+  if (!path) return "";
+  return /^(https?:|data:)/.test(path) ? path : API_BASE + path;
+};
+
+function formatSize(bytes = 0) {
+  return bytes > 1048576
+    ? (bytes / 1048576).toFixed(1) + " MB"
+    : Math.max(1, Math.round(bytes / 1024)) + " KB";
+}
+
+/* ==========================================================
+   DATA
+   ========================================================== */
+async function loadApps() {
+  try {
+    const res = await fetch(API_BASE + "/api/apps");
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    apps = await res.json();
+    demo = false;
+  } catch (err) {
+    apps = DEMO;
+    demo = true;
+  }
+
+  // Pengaman: aplikasi privat tidak pernah ditampilkan di web
+  apps = apps.filter(app => app.visibility !== "private");
+
+  $("#demoNote").hidden = !demo;
+  render();
+}
+
+/* ==========================================================
+   TAMPILAN
+   ========================================================== */
+const inTab = (app, tab) => tab === "all" || categoryOf(app) === tab;
+
+function renderTabs() {
+  $("#tabs").innerHTML = TABS.map(([key, label]) => {
+    const count = apps.filter(app => inTab(app, key)).length;
+    const on = key === activeTab;
+    return `<button role="tab" class="tab ${on ? "on" : ""}" aria-selected="${on}" data-tab="${key}">${label}<b>${count}</b></button>`;
+  }).join("");
+}
+
+function appCard(app) {
+  const download = fileUrl(app.file || `/api/apps/${encodeURIComponent(app.id)}/download`);
+  const icon = app.icon
+    ? `<img src="${escapeHTML(fileUrl(app.icon))}" alt="">`
+    : escapeHTML((app.name || "?")[0].toUpperCase());
+  const button = demo
+    ? `<button class="btn sm" disabled>Unduh (butuh server)</button>`
+    : `<a class="btn sm pri" href="${escapeHTML(download)}" download>Unduh</a>`;
+
+  return `
+    <article class="app">
+      <div class="top">
+        <div class="ico">${icon}</div>
+        <div>
+          <div class="name">${escapeHTML(app.name)}</div>
+          <div class="meta">v${escapeHTML(app.version || "1.0")} &middot; ${escapeHTML(categoryOf(app))} &middot; ${formatSize(app.size)}</div>
+        </div>
+      </div>
+      <p class="desc">${escapeHTML(app.desc || "Tanpa deskripsi.")}</p>
+      <div>${button}</div>
+    </article>`;
+}
+
+function renderGrid() {
+  const query = $("#q").value.trim().toLowerCase();
+  const list = apps.filter(app => {
+    if (!inTab(app, activeTab)) return false;
+    const text = `${app.name} ${app.desc || ""} ${categoryOf(app)}`.toLowerCase();
+    return !query || text.includes(query);
+  });
+
+  $("#grid").innerHTML = list.length
+    ? list.map(appCard).join("")
+    : `<div class="empty">${query ? "Tidak ada aplikasi yang cocok." : "Belum ada aplikasi yang dibagikan."}</div>`;
+}
+
+function render() {
+  renderTabs();
+  renderGrid();
+}
+
+/* ==========================================================
+   EVENT & MULAI
+   ========================================================== */
+$("#q").addEventListener("input", renderGrid);
+
+$("#tabs").addEventListener("click", event => {
+  const button = event.target.closest("[data-tab]");
+  if (!button) return;
+  activeTab = button.dataset.tab;
+  render();
+});
+
+loadApps();
+setInterval(loadApps, REFRESH_MS);
+</script>
+
+</body>
+</html>
